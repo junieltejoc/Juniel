@@ -1,0 +1,127 @@
+---
+/** Optional: pass initial filter labels via props if you like */
+const { industryLabel = "Industry", servicesLabel = "Services" } = Astro.props;
+---
+
+<section class="works-hero">
+  <div class="wrap">
+    <h1 class="title">My Work</h1>
+    <p class="blurb">
+      Whether it’s a very small personal website or a sophisticated enterprise
+      application, we are passionate about every aspect of what we do.
+    </p>
+  </div>
+
+  <!-- small, inline script to toggle the dropdowns -->
+  <script is:inline>
+    document.addEventListener("click", (e) => {
+      const all = document.querySelectorAll('[data-dd]');
+      const root = e.target.closest?.('[data-dd]');
+      // close others
+      all.forEach(dd => {
+        if (dd !== root) {
+          dd.querySelector(".menu")?.setAttribute("hidden", "");
+          dd.querySelector(".pill")?.setAttribute("aria-expanded", "false");
+        }
+      });
+      // toggle current
+      if (root && e.target.closest(".pill")) {
+        const btn = root.querySelector(".pill");
+        const menu = root.querySelector(".menu");
+        const open = menu.hasAttribute("hidden");
+        if (open) { menu.removeAttribute("hidden"); btn.setAttribute("aria-expanded", "true"); }
+        else { menu.setAttribute("hidden", ""); btn.setAttribute("aria-expanded", "false"); }
+      } else if (!root) {
+        // click outside -> close all
+        all.forEach(dd => {
+          dd.querySelector(".menu")?.setAttribute("hidden", "");
+          dd.querySelector(".pill")?.setAttribute("aria-expanded", "false");
+        });
+      }
+    });
+  </script>
+</section>
+
+<style>
+/* Wrapper */
+.works-hero{
+  position:relative;
+  padding: clamp(2.4rem, 8vw, 5rem) 0 clamp(3.2rem, 10vw, 6rem);
+  color:#fff;
+  background:
+    linear-gradient(90deg, #0b0b0c 0%, #241824 18%, #292829 36%, #353234 58%, #363636 76%, #555555 100%);
+  overflow:hidden;
+}
+
+/* subtle vertical frames */
+.works-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.06) 0 1px, transparent 1px 12vw);
+  opacity:.15;
+  pointer-events:none;
+}
+
+/* heading + blurb block */
+.wrap{
+  max-width:1200px; margin:0 auto; padding: 0 24px;
+}
+.title{ margin: 0 0 .8rem; color:#fff; }
+.blurb{ margin: 0; max-width: 58ch; color: rgba(255,255,255,.9); }
+
+/* ===== Filters bar ===== */
+.filters{
+  position: sticky; left:0; right:0; bottom:0;
+  margin-top: clamp(1.6rem, 4vw, 2.4rem);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(12,12,14,.0) 20%, rgba(12,12,14,.65) 100%);
+  backdrop-filter: blur(2px);
+}
+.filters-inner{
+  max-width:1200px; margin: 0 auto; padding: 14px 24px 18px;
+  display:flex; align-items:center; gap:10px;
+}
+
+/* slash divider */
+.slash{
+  display:inline-block;
+  color: rgba(255,255,255,.7);
+  margin: 0 4px;
+}
+
+/* dropdown base */
+.dd{ position:relative; }
+.pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 14px;
+  border-radius:14px;
+  color:#e8e8ea;
+  background:#2a2a30;
+  border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+}
+.pill:hover{ background:#33333a; }
+.pill:focus-visible{ outline:2px solid #4b4b4b; outline-offset:2px; }
+
+.chev{ opacity:.9; }
+
+/* menu */
+.menu{
+  position:absolute; top: calc(100% + 8px); left:0;
+  min-width: 220px;
+  background: rgba(22,22,26,.96);
+  border:1px solid rgba(77, 77, 77, 0.12);
+  border-radius:12px;
+  padding:8px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+  list-style: none; margin:0;
+  display:grid; gap:4px;
+  z-index:10;
+}
+.menu a{
+  display:block; padding:10px 12px; border-radius:10px;
+  color:#e8e8ea; text-decoration:none;
+}
+.menu a:hover{ background: rgba(39, 39, 39, 0.08); }
+</style>

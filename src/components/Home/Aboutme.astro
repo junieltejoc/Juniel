@@ -1,0 +1,241 @@
+---
+/**
+ * Aboutme.astro
+ * Props:
+ *  - imageSrc: string (defaults to /works/Juniel.jpg in /public)
+ *  - imageAlt: string
+ */
+
+const {
+  imageSrc = "/works/Juniel.jpg",
+  imageAlt = "Portrait",
+} = Astro.props;
+
+---
+
+<section id="about" class="about">
+  <div class="container">
+    <!-- Heading -->
+    <header class="heading reveal" style="--d: .0s">
+      <h2 class="reveal" style="--d: .05s">About Me</h2>
+      <div class="accent-line reveal" style="--d: .12s" aria-hidden="true"></div>
+      <p class="subtitle reveal" style="--d: .18s">
+        Get to know the person behind the <span class="code">creativity</span>
+      </p>
+    </header>
+
+    <!-- Main content -->
+    <div class="content">
+      <!-- Left: Bio -->
+      <div class="bio">
+        <div class="bio-block reveal" style="--d: .05s">
+          <p>
+            I’m a dedicated WordPress Developer, SEO Specialist, and Front-End Web Developer with a passion for creating websites that are both visually stunning and highly functional. I work with WordPress (Elementor, Gutenberg), Astro, Sanity CMS, and front-end tools like HTML, CSS, Tailwind, and JavaScript to deliver seamless digital experiences. What started as simple curiosity has grown into a commitment to building solutions that help businesses stand out and grow online.
+          </p>
+        </div>
+
+        <div class="bio-block reveal" style="--d: .12s">
+          <p>
+            I specialize in bridging design and development, ensuring every project is visually
+            engaging, user-friendly, and optimized for search engines. From custom WordPress builds
+            to front-end development and SEO strategies, my goal is to create experiences that are
+            both functional and impactful.
+          </p>
+        </div>
+
+        <div class="bio-block reveal" style="--d: .18s">
+          <p>
+            Outside of work, I enjoy playing football (soccer), making music, gaming, and exploring
+            new technologies through YouTube tutorials to keep growing in web development and SEO.
+          </p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats reveal" style="--d: .24s">
+          <div class="stat">
+            <div class="value value-muted">3+</div>
+            <div class="label">Years Experience</div>
+          </div>
+          <div class="stat">
+            <div class="value value-purple">40+</div>
+            <div class="label">Projects Completed</div>
+          </div>
+          <div class="stat">
+            <div class="value value-green">5</div>
+            <div class="label">School Student Projects</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Photo -->
+      <figure class="photo reveal" style="--d: .3s">
+        <div class="frame">
+          <img src={imageSrc} alt={imageAlt} loading="lazy" />
+        </div>
+      </figure>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --accent: rgb(81, 204, 245);
+      --muted: #a3a3a3;
+      --grid-line: rgba(255, 255, 255, 0.04);
+    }
+
+    /* ===== Fade-in on scroll (IntersectionObserver adds .is-inview) ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity .7s cubic-bezier(.22,.61,.36,1) var(--d, 0s),
+        transform .7s cubic-bezier(.22,.61,.36,1) var(--d, 0s);
+      will-change: opacity, transform;
+    }
+    .reveal.is-inview {
+      opacity: 1;
+      transform: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .reveal.is-inview {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Section background with subtle grid */
+    .about {
+      position: relative;
+      background: #0b0d0b;
+      padding: 64px 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px;
+      background-position: -1px -1px, -1px -1px;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    @media (min-width: 640px) { .container { padding: 0 24px; } }
+    @media (min-width: 1024px) { .container { padding: 0 32px; } }
+
+    /* Heading */
+    .heading { text-align: center; }
+    .heading h2 { color: #ffffff !important; margin: 0; }
+    .subtitle { color: #cfcfcf; margin-top: 12px; text-align: center; }
+    .subtitle .code { color: var(--accent); }
+
+    /* White underline (no gradient) */
+    .accent-line {
+      width: 110px;
+      height: 6px;
+      margin: 12px auto 0;
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 6px 22px rgba(255, 255, 255, 0.35);
+    }
+
+    /* Layout */
+    .content {
+      display: grid;
+      gap: 28px;
+      margin-top: 36px;
+      grid-template-columns: 1fr;  /* phones */
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      .content { grid-template-columns: 1fr 1fr; gap: 36px; } /* tablets */
+    }
+    @media (min-width: 1024px) {
+      .content { grid-template-columns: 1.2fr 1fr; gap: 48px; } /* desktops */
+    }
+
+    /* Bio — mobile: centered; tablet/desktop: left */
+    .bio { color: #e6e6e6; text-align: center; }
+    .bio p { max-width: 65ch; margin: 0 auto; }
+    @media (min-width: 768px) {
+      .bio { text-align: left; }
+      .bio p { margin: 0; }
+    }
+
+    .bio-block {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .bio-block:last-of-type { border-bottom: none; }
+
+    /* Stats — mobile centered; tablet/desktop left */
+    .stats {
+      display: grid;
+      gap: 16px;
+      margin-top: 22px;
+      grid-template-columns: 1fr;
+      justify-items: center;   /* mobile center */
+      text-align: center;      /* mobile center */
+    }
+    @media (min-width: 480px) {
+      .stats { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+    @media (min-width: 768px) {
+      .stats {
+        grid-template-columns: repeat(3, minmax(140px, 1fr));
+        justify-items: start;  /* left on tablet+ */
+        text-align: left;      /* left on tablet+ */
+      }
+    }
+    .value { color: #fff; }
+    .value-muted { color: #e5e5e5; }
+    .value-purple { color: var(--accent); }
+    .value-green { color: #22c55e; }
+    .label { color: #bdbdbd; }
+
+    /* Photo */
+    .photo { display: flex; justify-content: center; }
+    .frame {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 18px;
+      background: #000;
+      border: 3px solid rgba(200, 200, 200, 0.35);
+      box-shadow:
+        0 10px 40px rgba(0,0,0,0.55),
+        inset 0 0 0 1px rgba(255,255,255,0.08);
+      padding: 6px; /* inner gutter for double-border look */
+    }
+    .frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+  </style>
+
+  <!-- Tiny, safe JS to add .is-inview when the section enters the viewport -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var targets = document.querySelectorAll('#about .reveal');
+      if (!('IntersectionObserver' in window)) {
+        for (var i = 0; i < targets.length; i++) targets[i].classList.add('is-inview');
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-inview');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { root: null, threshold: 0.12 });
+
+      for (var i = 0; i < targets.length; i++) io.observe(targets[i]);
+    });
+  </script>
+</section>

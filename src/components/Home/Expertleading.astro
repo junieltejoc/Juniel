@@ -1,0 +1,186 @@
+---
+/** Update/resize as you like */
+const clients = [
+  "/works/1.png","/works/2.png","/works/3.png","/works/4.png",
+  "/works/1.png","/works/2.png","/works/3.png","/works/4.png",
+];
+---
+<section class="expert">
+  <!-- Animated dark/glow background -->
+  <div class="bg" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <h2 class="eyebrow">Experts in leading web platforms</h2>
+
+    <ul class="partners" role="list">
+      <li class="item">
+        <img src="/works/WordPress-Logo.wine_.svg" alt="WordPress" loading="lazy" />
+        <span class="fallback wp">WordPress</span>
+      </li>
+
+      <li class="item">
+        <img src="/works/woo-repo.svg" alt="WooCommerce Pro Partner" loading="lazy" />
+        <span class="fallback woo">
+          <span class="chip">woo</span>
+          <span class="mini">PRO Partner</span>
+        </span>
+      </li>
+
+      <li class="item">
+        <img src="/works/ShopifyPartners_Primary.svg" alt="Shopify Partners" loading="lazy" />
+        <span class="fallback shop">
+          <span class="bag" aria-hidden="true"></span>
+          <span>shopify <em>partners</em></span>
+        </span>
+      </li>
+    </ul>
+
+    <span class="spark" aria-hidden="true"></span>
+
+    <h2 class="subhead">Trusted for web projects since 2022</h2>
+
+    <!-- Marquee rail (auto-scroll LEFT) -->
+    <div class="rail" aria-label="Client logos">
+      <div class="track">
+        <!-- set A -->
+        <ul class="set" role="list">
+          {clients.map((src, i) => (
+            <li class="card">
+              <img src={src} alt={`Client ${i + 1} logo`} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+        <!-- set B (duplicate for seamless loop) -->
+        <ul class="set" aria-hidden="true">
+          {clients.map((src, i) => (
+            <li class="card">
+              <img src={src} alt="" loading="lazy" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* ===== FRAME / BACKGROUND ===== */
+.expert{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding: clamp(2.5rem, 5vw, 4rem) 0;
+  background:#0b0f15;
+}
+
+.bg{
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(900px 700px at 50% -10%, rgba(150,80,255,.22), transparent 60%),
+    radial-gradient(1100px 800px at 50% 10%, rgba(255,60,150,.14), transparent 65%),
+    radial-gradient(800px 600px at 20% 30%, rgba(100,150,255,.12), transparent 65%);
+  filter: blur(6px) hue-rotate(0deg);
+  animation: hue 36s linear infinite;
+}
+@keyframes hue { to { filter: blur(6px) hue-rotate(360deg); } }
+.bg::before{
+  content:""; position:absolute; inset:-15% -10% -40% -10%;
+  background: radial-gradient(1200px 900px at 50% 0%, rgba(255,255,255,.06), transparent 60%);
+  filter: blur(10px);
+  animation: floaty 5s ease-in-out infinite alternate;
+}
+@keyframes floaty { from { transform:translate3d(0,0,0) scale(1);} to { transform:translate3d(0,10px,0) scale(1.02);} }
+
+/* ===== CONTENT WRAP ===== */
+.wrap{
+  position:relative; z-index:2;
+  max-width:1200px; margin:0 auto; padding:0 16px;
+  text-align:center;
+}
+.wrap::before{
+  content:""; position:absolute; inset:-24px 0; z-index:-1;
+  background: repeating-linear-gradient(to right, rgba(255,255,255,.045) 0 1px, transparent 1px 25%);
+  mask-image: radial-gradient(80% 100% at 50% 0%, #000 35%, transparent 80%);
+  pointer-events:none;
+}
+
+/* ===== HEADINGS ===== */
+.eyebrow{ margin:0 0 1rem; color:#d8ddeb; }
+.subhead{ margin: clamp(1.2rem, 3vw, 5.6rem) 0 1rem; color:#cfd6e3; }
+
+/* ===== PARTNER ROW (big logos) ===== */
+.partners{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  align-items:center; justify-items:center;
+  gap: clamp(18px, 3.5vw, 36px);
+}
+.item{ display:flex; align-items:center; justify-content:center; min-height: clamp(56px, 7vw, 80px); }
+.item img{ max-height: clamp(34px, 4.5vw, 56px); width:auto; display:block; opacity:.97; }
+.item:has(img[src]) .fallback{ display:none; }
+
+.fallback{ display:inline-flex; align-items:center; gap:12px; color:#e6e9f1; }
+.fallback.wp{ }
+.fallback.woo .chip{
+  background:#6b4cff; color:#fff; border-radius:8px; padding:.25rem .55rem;
+}
+.fallback.woo .mini{
+  border:1px solid #2a2f3d; border-radius:7px; padding:.2rem .5rem; color:#cfd6e3;
+}
+.fallback.shop .bag{
+  width:16px; height:20px; border-radius:3px; background:#0f1a28;
+  box-shadow: inset 0 0 0 2px #223144; margin-right:6px;
+}
+.fallback.shop em{}
+
+/* tiny spark dot */
+.spark{
+  display:inline-block; width:6px; height:6px; border-radius:999px;
+  background:#ffffff; opacity:.9; margin: 18px auto 0;
+  box-shadow: 0 0 12px rgba(255,255,255,.7);
+}
+
+/* ===== CLIENT MARQUEE (auto-scroll LEFT) ===== */
+.rail{
+  --speed: 27s;               /* tweak speed here (smaller = faster) */
+  margin-top: clamp(1rem, 3vw, 1.6rem);
+  overflow: hidden;
+  position: relative;
+  /* soft edge fade like the reference */
+  mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.track{
+  display:flex;
+  width:max-content;
+  gap:0;                       /* gaps belong inside each set */
+  animation: scrollLeft var(--speed) linear infinite;
+}
+.rail:hover .track{ animation-play-state: paused; } /* pause on hover */
+
+.set{
+  display:flex; gap:14px; margin:0; padding:0; list-style:none;
+}
+
+/* cards are fixed-width so the loop feels steady */
+.card{
+  flex:0 0 auto;
+  width:180px;                 /* card width */
+  min-height:84px;
+  background:#121722; border:1px solid #232839; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  filter:grayscale(100%); opacity:.85;
+  transition: filter .3s ease, opacity .3s ease, transform .3s ease, background .3s;
+}
+.card:hover{ filter:none; opacity:1; transform: translateY(-2px); background:#151b28; }
+.card img{ max-height:40px; width:auto; object-fit:contain; display:block; }
+
+@keyframes scrollLeft{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(-50%); } /* two identical sets => -50% completes one loop */
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .track{ animation: none; }
+}
+</style>

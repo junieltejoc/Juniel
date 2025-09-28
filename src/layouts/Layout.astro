@@ -1,0 +1,74 @@
+
+
+---
+import "../styles/global.css";
+
+const { title = "Site" } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- Global background behind everything -->
+    <div class="site-bg" aria-hidden="true">
+      <div class="site-bg__glow"></div>
+      <div class="site-bg__rings"></div>
+    </div>
+
+
+    <!-- Page content -->
+    <main id="main">
+      <slot />
+    </main>
+  </body>
+
+  <style>
+    :root{
+      /* One source of truth for the gradient */
+      --site-gradient: radial-gradient(1200px 600px at 10% 10%, #1a1f2b, #0f1218 60%, #0b0d12 100%);
+    }
+
+    html, body { margin:0; padding:0; background:#0b0d12; color:#e8e8ea; }
+
+    /* Fixed full-viewport shared background */
+    .site-bg{
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      background:var(--site-gradient);
+    }
+
+    .site-bg__glow{
+      position:absolute; inset:-25% -20% -20% -20%;
+      mix-blend-mode:screen;
+      background:
+        radial-gradient(520px 380px at 20% 60%, rgba(110,140,255,.18), transparent 60%),
+        radial-gradient(640px 460px at 70% 25%, rgba(190,120,255,.14), transparent 62%),
+        radial-gradient(720px 520px at 45% 90%, rgba(90,200,255,.12), transparent 65%);
+      filter:hue-rotate(0deg) saturate(120%) blur(1px);
+      animation:
+        hueCycle 5s linear infinite,
+        drift 5s ease-in-out infinite alternate;
+      will-change: transform, filter;
+    }
+
+    .site-bg__rings{
+      position:absolute; inset:-50% -15% auto auto; width:130%; height:130%;
+      opacity:.55;
+      background:
+        radial-gradient(900px 900px at 58% 56%, rgba(90,120,255,.07), transparent 65%),
+        radial-gradient(1200px 800px at 25% 45%, rgba(255,255,255,.045), transparent 70%);
+      animation: ringsPulse 14s ease-in-out infinite alternate;
+      pointer-events:none;
+    }
+
+    /* Keyframes reused by Hero */
+    @keyframes hueCycle { from { filter:hue-rotate(0deg)   saturate(120%) blur(1px); } to { filter:hue-rotate(360deg) saturate(120%) blur(1px); } }
+    @keyframes drift { from { transform: translate3d(-1.5%, -1%, 0) scale(1.00); } to { transform: translate3d( 1.5%,  1%, 0) scale(1.03); } }
+    @keyframes ringsPulse { from { opacity:.45; transform: scale(1); } to { opacity:.65; transform: scale(1.02); } }
+
+    /* Layout */
+    #main { position:relative; z-index:100; }
+  </style>

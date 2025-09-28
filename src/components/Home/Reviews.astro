@@ -1,0 +1,220 @@
+---
+const testimonials = [
+  {
+    id: 1,
+    quote:
+      "Juniel completed a Wordpress project for us very quickly with great results. Definitely will be using him again for future projects and Highly Recommnend.",
+    name: "Jared Daise",
+    title: "Kudos to Juniel",
+    company: "Chapman Plumbing Client",
+    image: "/works/client.jpg",
+  },
+  {
+    id: 2,
+    quote:
+      "My Client was so satified with Juniel work. Juniel were excellent and efficient in finishing the tasks(In just two days, all 10 pages are done)",
+    name: "Tray",
+    title: "Trusted,Talented and On Time",
+    company: "VA Consultant",
+    image: "/works/trey.png",
+  },
+  {
+    id: 3,
+    quote:
+      "Juniel build a beautiful and functional website for my business. He understood exactly what I needed and delivered it on time. The site looks greet,run smoothly, and has helped attract more customer. I'm very happy with the result!",
+    name: "Carlos Diez Jr..",
+    title: "Juniel brough my vision to life",
+    company: "Partime Client/Trojan Roofing",
+    image: "/works/carlos.png",
+  },
+];
+---
+
+<section id="reviews-section" class="reviews-section">
+  <div class="container">
+    <!-- Header -->
+    <div class="reviews-header">
+      <span class="section-label reveal" style="--d:.00s">Client Testimonials</span>
+      <h2 class="section-title reveal" style="--d:.06s">What My Clients Say</h2>
+      <p class="section-description reveal" style="--d:.12s">
+        Browse my client testimonials to see my success stories and the high-quality feedback we've received on my web projects.
+      </p>
+    </div>
+
+    <!-- Grid -->
+    <div class="testimonials-grid">
+      {testimonials.map((t, i) => (
+        <div class="testimonial-card reveal" style={`--d:${0.06 * (i + 3)}s`}>
+          <div class="testimonial-content">
+            <p class="testimonial-quote">{t.quote}</p>
+          </div>
+
+          <div class="testimonial-author">
+            <div class="author-image">
+              <img src={t.image} alt={t.name} />
+            </div>
+            <div class="author-info">
+              <h4 class="author-name">{t.name}</h4>
+              <p class="author-title">{t.title}</p>
+              <p class="author-company">{t.company}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --grid-line: rgba(255, 255, 255, 0.04);
+    }
+
+    /* ===== Fade-in on scroll (IntersectionObserver adds .is-inview) ===== */
+    .reveal{
+      opacity:0;
+      transform:translateY(14px);
+      transition:
+        opacity .7s cubic-bezier(.22,.61,.36,1) var(--d,0s),
+        transform .7s cubic-bezier(.22,.61,.36,1) var(--d,0s);
+      will-change: opacity, transform;
+    }
+    .reveal.is-inview{ opacity:1; transform:none; }
+    @media (prefers-reduced-motion: reduce){
+      .reveal, .reveal.is-inview{ opacity:1 !important; transform:none !important; transition:none !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .reveal.is-inview {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Section styling (kept from your original, with subtle grid bg) */
+    .reviews-section {
+      position: relative;
+      background-color: #0a0a0a;
+      color: #ffffff;
+      padding: 80px 0;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+
+      /* subtle grid background to match About section vibe */
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px;
+      background-position: -1px -1px, -1px -1px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .reviews-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-label {
+      display: inline-block;
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .section-title {
+      margin: 0 0 20px 0;
+    }
+
+    .section-description {
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .testimonial-card {
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .testimonial-content { flex: 1; margin-bottom: 30px; }
+    .testimonial-quote {
+      margin: 0 0 20px 0;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: auto;
+    }
+
+    .author-image { flex-shrink: 0; }
+    .author-image img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.18);
+    }
+
+    .author-info { flex: 1; }
+    .author-name { margin: 0 0 5px 0; }
+    .author-title { margin: 0 0 3px 0; opacity: 0.8; }
+    .author-company { margin: 0; opacity: 0.6; text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .testimonials-grid { grid-template-columns: 1fr; gap: 20px; }
+      .testimonial-card { padding: 20px; }
+      .reviews-section { padding: 60px 0; }
+    }
+  </style>
+
+  <!-- IntersectionObserver to toggle .is-inview (same pattern as About) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var root = document.getElementById('reviews-section');
+      if (!root) return;
+
+      var targets = root.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        for (var i = 0; i < targets.length; i++) targets[i].classList.add('is-inview');
+        return;
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-inview');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { root: null, threshold: 0.12 });
+
+      for (var i = 0; i < targets.length; i++) io.observe(targets[i]);
+    });
+  </script>
+</section>

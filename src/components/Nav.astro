@@ -1,0 +1,122 @@
+---
+const links = [
+  { href: "/", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#projects", label: "Projects" },
+  { href: "#reviews-section", label: "Testimonials" },
+];
+---
+<header class="site-header" id="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="/">Juniel.Tejoc Dev</a>
+
+    <input id="nav-toggle" class="nav-toggle" type="checkbox" aria-label="Toggle menu" />
+    <label for="nav-toggle" class="hamburger" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="nav">
+      {links.map((l) => (
+        <a href={l.href} class="nav-link">{l.label}</a>
+      ))}
+      <a class="cta" href="#book-now">Schedule a Call</a>
+    </nav>
+  </div>
+
+  <!-- Smooth scroll + offset + mobile close -->
+  <script is:inline>
+    (function () {
+      const header = document.getElementById('site-header');
+      const toggle = document.getElementById('nav-toggle');
+
+      // Smooth behavior for in-page hash links
+      function smoothScrollTo(targetEl) {
+        if (!targetEl) return;
+        // header offset (sticky)
+        const offset = header ? header.getBoundingClientRect().height : 0;
+        const y = targetEl.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+
+      // Intercept clicks on menu links that start with '#'
+      document.addEventListener('click', function (e) {
+        const a = e.target.closest('a');
+        if (!a) return;
+
+        const href = a.getAttribute('href') || '';
+        const isHash = href.startsWith('#');
+        const isSamePageRoot = (href === '/' && location.pathname === '/');
+
+        // Close mobile menu if open
+        const closeMobile = () => { if (toggle && toggle.checked) toggle.checked = false; };
+
+        if (isHash) {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            smoothScrollTo(target);
+            closeMobile();
+          }
+        } else if (isSamePageRoot) {
+          // Clicking "Home" when already on "/": smooth to top
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          closeMobile();
+        }
+        // else: normal navigation (other pages)
+      });
+
+      // If the page loads with a hash in the URL, adjust to account for header
+      window.addEventListener('load', () => {
+        if (location.hash) {
+          const el = document.querySelector(location.hash);
+          if (el) {
+            // jump first (browser default), then correct position smoothly
+            setTimeout(() => smoothScrollTo(el), 0);
+          }
+        }
+      });
+    })();
+  </script>
+</header>
+
+<style>
+  /* Enable native smooth scroll for anchor jumps (fallback). */
+  html { scroll-behavior: smooth; }
+
+  .site-header{
+    position:sticky; top:0; z-index:200;
+    background:transparent;
+    backdrop-filter:none;
+  }
+  .nav-wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1200px; margin:0 auto; padding:16px;
+  }
+  .brand{ text-decoration:none; color:#e8e8ea; }
+  .nav{ display:flex; align-items:center; gap:18px; background:transparent; }
+  .nav-link{ color:#cfd6e3; text-decoration:none; opacity:.95; }
+  .nav-link:hover{ opacity:1; }
+  .cta{
+    display:inline-block; margin-left:6px;
+    padding:10px 14px; border-radius:12px; text-decoration:none;
+    color:#0c0f15; background:#e7eaee; border:1px solid #e7eaee;
+  }
+
+  /* Mobile */
+  .nav-toggle{ display:none; }
+  .hamburger{ display:none; cursor:pointer; width:32px; height:28px; gap:6px; flex-direction:column; }
+  .hamburger span{ display:block; height:3px; background:#e8e8ea; }
+
+  @media (max-width: 860px){
+    .hamburger{ display:flex; }
+    .nav{
+      position:absolute; right:16px; top:60px; flex-direction:column; gap:10px;
+      padding:12px; border:1px solid #2a3042; border-radius:12px;
+      background:rgba(15,18,24, .35);
+      backdrop-filter: blur(6px);
+      display:none;
+    }
+    .nav-toggle:checked ~ .nav{ display:flex; }
+  }
+</style>

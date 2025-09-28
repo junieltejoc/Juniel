@@ -1,0 +1,77 @@
+---
+const { title = "Book a Call" } = Astro.props;
+---
+
+<section class="booknow reveal-root" id="book-now">
+  <div class="wrap">
+    <h2 class="visually-hidden reveal" style="--d:.00s">{title}</h2>
+
+    <div class="calendar-shell reveal" style="--d:.10s">
+      <!-- Koalendar Inline Embed Start (your updated snippet) -->
+      <div id="inline-widget-meet-with-juniel"></div>
+      <script is:inline>
+        window.Koalendar = window.Koalendar || function(){ (Koalendar.props = Koalendar.props || []).push(arguments) };
+      </script>
+      <script async src="https://koalendar.com/assets/widget.js"></script>
+      <script is:inline>
+        Koalendar('inline', {"url":"https://koalendar.com/e/meet-with-juniel","selector":"#inline-widget-meet-with-juniel"});
+      </script>
+      <!-- Koalendar Inline Embed End -->
+    </div>
+  </div>
+
+  <style>
+    /* Fade-in reveal */
+    .reveal{ opacity:0; transform:translateY(14px);
+      transition: opacity .7s cubic-bezier(.22,.61,.36,1) var(--d,0s),
+                  transform .7s cubic-bezier(.22,.61,.36,1) var(--d,0s);
+      will-change: opacity, transform;
+    }
+    .reveal.is-inview{ opacity:1; transform:none; }
+    @media (prefers-reduced-motion: reduce){
+      .reveal, .reveal.is-inview{ opacity:1 !important; transform:none !important; transition:none !important; }
+    }
+
+    /* Section frame (no typography) */
+    .booknow{ background:#1a1a1a; color:#e8e8ea; padding: clamp(2rem, 6vw, 4rem) 0; }
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 16px; }
+
+    .calendar-shell{
+      background:#111; border:1px solid rgba(255,255,255,.08);
+      border-radius:16px; padding:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.30);
+      min-height:560px; /* avoid layout shift while loading */
+    }
+    @media (min-width:900px){ .calendar-shell{ padding:16px; min-height:680px; } }
+
+    /* A11y helper */
+    .visually-hidden{
+      position:absolute !important; height:1px; width:1px; overflow:hidden;
+      clip:rect(0 0 0 0); white-space:nowrap; margin:-1px; padding:0; border:0;
+    }
+  </style>
+
+  <!-- IntersectionObserver to toggle .is-inview -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function () {
+      var root = document.querySelector('.reveal-root');
+      if (!root) return;
+      var targets = root.querySelectorAll('.reveal');
+
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach(el => el.classList.add('is-inview'));
+        return;
+      }
+      var io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-inview');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      targets.forEach(el => io.observe(el));
+    });
+  </script>
+</section>

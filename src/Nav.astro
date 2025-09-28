@@ -1,0 +1,150 @@
+---
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/work", label: "Work" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+---
+
+<header class="site-header" id="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="/">Juniel.dev</a>
+
+    <!-- mobile hamburger -->
+    <button class="hamburger" id="nav-btn" aria-expanded="false" aria-controls="nav-panel" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- desktop links -->
+    <nav class="nav-desktop" aria-label="Primary">
+      {links.map((l) => (<a href={l.href} class="nav-link">{l.label}</a>))}
+      <a class="cta" href="/call">Schedule a Call</a>
+    </nav>
+  </div>
+
+  <!-- mobile overlay + panel -->
+  <div class="nav-overlay" id="nav-overlay" hidden></div>
+  <nav class="nav-panel" id="nav-panel" aria-label="Mobile" hidden>
+    {links.map((l) => (<a href={l.href} class="panel-link">{l.label}</a>))}
+    <a class="panel-cta" href="/call">Schedule a Call</a>
+  </nav>
+
+  <script is:inline>
+    (function () {
+      const header = document.getElementById('site-header');
+      const btn = document.getElementById('nav-btn');
+      const panel = document.getElementById('nav-panel');
+      const overlay = document.getElementById('nav-overlay');
+
+      // header: transparent → black after small scroll
+      const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('load', onScroll);
+      document.addEventListener('astro:page-load', onScroll);
+
+      // mobile panel controls
+      const openPanel = () => {
+        panel.hidden = false; overlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+        btn.setAttribute('aria-expanded', 'true');
+        const first = panel.querySelector('a'); first && first.focus({ preventScroll: true });
+      };
+      const closePanel = () => {
+        panel.hidden = true; overlay.hidden = true;
+        document.body.style.overflow = '';
+        btn.setAttribute('aria-expanded', 'false');
+      };
+
+      btn.addEventListener('click', () => (panel.hidden ? openPanel() : closePanel()));
+      overlay.addEventListener('click', closePanel);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) closePanel(); });
+      panel.addEventListener('click', (e) => { if (e.target.closest('a')) closePanel(); });
+    })();
+  </script>
+</header>
+
+<style>
+  :root{
+    --nav-fg: #e8e8ea;
+    --nav-fg-dim:#cfd6e3;
+    --nav-black: rgba(0,0,0,.85);
+    --nav-border: rgba(255,255,255,.08);
+    --panel-bg: rgba(10,12,16,.96);
+  }
+
+  /* fixed header; layout adds top padding */
+  .site-header{
+    position:fixed; inset:0 0 auto 0; z-index:200;
+    background:transparent; border-bottom:1px solid transparent;
+    transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease, box-shadow .25s ease;
+  }
+  .site-header.scrolled{
+    background:var(--nav-black);
+    border-bottom-color:var(--nav-border);
+    backdrop-filter:saturate(120%) blur(6px);
+    box-shadow:0 2px 14px rgba(0,0,0,.25);
+  }
+
+  .nav-wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1200px; margin:0 auto; padding:16px;
+    color:var(--nav-fg);
+  }
+
+  .brand{
+    text-decoration:none; color:var(--nav-fg);
+    /* no font-size / font-weight here */
+    letter-spacing:.2px;
+  }
+
+  /* desktop */
+  .nav-desktop{ display:flex; align-items:center; gap:18px; }
+  .nav-link{
+    color:var(--nav-fg-dim); text-decoration:none;
+    /* no font-size / font-weight */
+    padding:8px 10px; border-radius:10px;
+  }
+  .nav-link:hover{ color:var(--nav-fg); background:rgba(255,255,255,.08); }
+
+  .cta{
+    color:#0c0f15; background:#e7eaee; border:1px solid #e7eaee; border-radius:12px;
+    padding:10px 14px; text-decoration:none;
+    /* no font-size / font-weight */
+  }
+
+  /* mobile: hamburger */
+  .hamburger{
+    display:none; width:34px; height:30px; gap:6px; flex-direction:column; justify-content:center;
+    background:transparent; border:1px solid var(--nav-border); border-radius:10px; color:var(--nav-fg);
+    /* no font-size / font-weight */
+  }
+  .hamburger span{ display:block; height:2px; background:var(--nav-fg); }
+
+  /* mobile panel + overlay */
+  .nav-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:198; }
+  .nav-panel{
+    position:fixed; top:var(--header-h); right:12px; z-index:199;
+    background:var(--panel-bg); border:1px solid var(--nav-border); border-radius:14px;
+    padding:12px; width:min(86vw, 320px); box-shadow:0 12px 32px rgba(0,0,0,.35);
+    display:grid; gap:8px;
+  }
+  .panel-link{
+    color:var(--nav-fg); text-decoration:none; padding:10px 12px; border-radius:10px;
+    /* no font-size / font-weight */
+  }
+  .panel-link:hover{ background:rgba(255,255,255,.08); }
+  .panel-cta{
+    display:block; text-align:center; margin-top:4px;
+    color:#0c0f15; background:#e7eaee; border:1px solid #e7eaee; border-radius:12px; padding:10px 14px; text-decoration:none;
+    /* no font-size / font-weight */
+  }
+
+  /* responsive switches */
+  @media (max-width: 860px){
+    .nav-desktop{ display:none; }
+    .hamburger{ display:flex; }
+  }
+</style>

@@ -1,0 +1,171 @@
+---
+type Project = {
+  title: string;
+  img: string;        // path under /public
+  href?: string;      // external/internal link (optional)
+  tags: string[];
+  featuredDot?: boolean; // show tiny dot (like your 3rd card)
+};
+
+const projects: Project[] = [
+  {
+    title: "Heat Rx",
+    img: "/works/hEATRX1.jpg",
+    href: "https://heatrx.com/",
+    tags: ["Web Design", "Wordpress", "Gutenberg"]
+  },
+  {
+    title: "KMAce Towing Services",
+    img: "/works/KMAce Towing Services.jpg",
+    href: "https://kmacetowing.com/",
+    tags: [ "Web Design", "Elementor", "WordPress"]
+  },
+  {
+    title: "HeatTech Pest Control",
+    img: "/works/Heattech.jpg",
+    href: "https://heattechpestcontrol.com/",
+    tags: ["Web Design", "Wordpress", "Gutenberg"]
+  },
+  {
+    title: " Pest Management of Texas, Inc. in Dallas, (PMOT)",
+    img: "/works/PestManagement.jpg",
+    href: "https://www.pestcontroldallastx.com/",
+    tags: [ "Web Design", "Elementor", "WordPress"],
+    featuredDot: true
+  }
+];
+
+// Fallback helper if an image is missing
+function srcOr(listSrc: string) {
+  return listSrc || `https://picsum.photos/seed/${Math.random()}/1200/800`;
+}
+---
+
+<section class="projects">
+  <div class="wrap">
+    <div class="grid">
+      {projects.map((p) => {
+        const CardTag = p.href ? "a" : "div";
+        return (
+          <article class="cell">
+            <CardTag class="card" href={p.href} {...(p.href?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+              <div class="media">
+                <img src={srcOr(p.img)} alt={p.title} loading="lazy" />
+                <div class="tags">
+                  {p.tags.map((t) => <span class="pill">{t}</span>)}
+                </div>
+                {p.featuredDot && <span class="dot" aria-hidden="true"></span>}
+                <span class="scrim" aria-hidden="true"></span>
+              </div>
+            </CardTag>
+            <h3 class="title">{p.title}</h3>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+.projects{
+  padding: clamp(1.8rem, 4vw, 2.6rem) 0;
+  background: transparent;   /* relies on page bg */
+  color: #e8e8ea;
+}
+
+.wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 860px){
+  .grid{ grid-template-columns: 1fr 1fr; gap: 22px; }
+}
+
+.cell{ display: grid; gap: 10px; }
+
+.card{
+  display:block;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #14161c;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  will-change: transform, box-shadow;
+  text-decoration: none;
+  color: inherit;
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+  border-color: rgba(255,255,255,.14);
+}
+
+/* media */
+.media{
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #0f1218;
+}
+.media img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit: cover; display:block;
+  filter: saturate(.98) contrast(1.02);
+  transition: transform .35s ease;
+}
+.card:hover .media img{ transform: scale(1.02); }
+
+/* soft vignette */
+.scrim{
+  position:absolute; inset:0;
+  background: radial-gradient(140% 100% at 50% 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.28) 100%);
+  pointer-events:none;
+}
+
+/* top-left tag pills */
+.tags{
+  position: absolute; left: 10px; top: 10px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  z-index: 2;
+}
+.pill{
+  display:inline-block;
+  padding: 6px 10px;
+  color:#e8e8ea;
+  background: rgba(20,22,28,.85);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 3px 10px rgba(0,0,0,.25) inset, 0 2px 6px rgba(0,0,0,.15);
+}
+
+/* small indicator dot (as in your screenshot) */
+.dot{
+  position:absolute; left: 14px; top: 14px;
+  width:8px; height:8px; border-radius:50%;
+  background:#f0c27b;
+  box-shadow: 0 0 8px rgba(240,194,123,.8);
+}
+
+/* title under card */
+.title{
+  margin: 0 4px 0 4px;
+  color: #e6eaf3;
+}
+
+/* high-contrast focus ring */
+.card:focus-visible{
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+</style>
