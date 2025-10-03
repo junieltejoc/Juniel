@@ -1,11 +1,8 @@
-// @ts-check
+// astro.config.mjs
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
-import tailwindcss from '@tailwindcss/vite';
-
-// https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  site: 'https://junieltejoc.vercel.app',
+  integrations: [sitemap()],
 });
