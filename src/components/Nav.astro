@@ -1,14 +1,13 @@
 ---
 const links = [
   { href: "/", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#reviews-section", label: "Testimonials" },
 ];
+const onWorksPage = Astro.url.pathname.toLowerCase().startsWith("/myworksindex");
+const sectionHref = (id: string) => onWorksPage ? `/#${id}` : `#${id}`;
 ---
 <header class="site-header" id="site-header">
   <div class="nav-wrap">
-    <a class="brand" href="/">Juniel.Tejoc Dev</a>
+      <a class="brand" href="/">Juniel Tejoc <span>Developer</span></a>
 
     <input id="nav-toggle" class="nav-toggle" type="checkbox" aria-label="Toggle menu" />
     <label for="nav-toggle" class="hamburger" aria-hidden="true">
@@ -19,7 +18,10 @@ const links = [
       {links.map((l) => (
         <a href={l.href} class="nav-link">{l.label}</a>
       ))}
-      <a class="cta" href="#book-now">Schedule a Call</a>
+      <a href={sectionHref("about")} class="nav-link">About</a>
+      <a href="/Myworksindex/" class="nav-link">Projects</a>
+      <a href={sectionHref("reviews-section")} class="nav-link">Testimonials</a>
+      <a class="cta" href={sectionHref("book-now")}>Schedule a Call</a>
     </nav>
   </div>
 
