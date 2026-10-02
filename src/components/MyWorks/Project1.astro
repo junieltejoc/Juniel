@@ -1,171 +1,241 @@
 ---
 type Project = {
   title: string;
-  img: string;        // path under /public
-  href?: string;      // external/internal link (optional)
-  tags: string[];
-  featuredDot?: boolean; // show tiny dot (like your 3rd card)
+  image: string;
+  category: string;
+  technologies: string[];
+  summary: string;
+  href?: string;
+  alt: string;
 };
 
 const projects: Project[] = [
   {
-    title: "Heat Rx",
-    img: "/works/hEATRX1.jpg",
-    href: "https://heatrx.com/",
-    tags: ["Web Design", "Wordpress", "Gutenberg"]
+    title: "Top Bed Bug Pros",
+    image: "/works/Topbedbugpros.jpg",
+    category: "Pest Control / Bed Bug",
+    technologies: ["Astro", "Sanity CMS"],
+    summary: "Responsive pest control website with reusable Sanity content, clear treatment information, and contact paths.",
+    href: "https://www.topbedbugpros.com/",
+    alt: "Top Bed Bug Pros website displayed on a laptop"
   },
   {
-    title: "KMAce Towing Services",
-    img: "/works/KMAce Towing Services.jpg",
-    href: "https://kmacetowing.com/",
-    tags: [ "Web Design", "Elementor", "WordPress"]
+    title: "Bed Bugs Be Gone Now",
+    image: "/works/Bbgn.jpg",
+    category: "Pest Control / Bed Bug",
+    technologies: ["Astro", "Sanity CMS", "SEO"],
+    summary: "Bed bug treatment website built with a responsive Astro front end, reusable content, and clear service calls to action.",
+    href: "https://bedbugsbegonenow.com/",
+    alt: "Bed Bugs Be Gone Now website preview"
+  },
+  {
+    title: "Atlanta Bed Bug Experts",
+    image: "/works/atlanta.jpg",
+    category: "Pest Control / Bed Bug",
+    technologies: ["WordPress", "Gutenberg"],
+    summary: "Responsive service website organizing treatment details, service areas, customer reviews, and contact options.",
+    href: "https://atlantabedbugexperts.com/",
+    alt: "Atlanta Bed Bug Experts website preview"
+  },
+  {
+    title: "Heat Rx",
+    image: "/works/hEATRX1.jpg",
+    category: "Pest Control / Bed Bug",
+    technologies: ["WordPress", "Gutenberg"],
+    summary: "Website project for a pest treatment business, presented with a responsive layout and service-focused content.",
+    href: "https://heatrx.com/",
+    alt: "Heat Rx website preview"
   },
   {
     title: "HeatTech Pest Control",
-    img: "/works/Heattech.jpg",
+    image: "/works/Heattech.jpg",
+    category: "Pest Control / Bed Bug",
+    technologies: ["WordPress", "Gutenberg"],
+    summary: "Pest control website project built to present services and help visitors find business information.",
     href: "https://heattechpestcontrol.com/",
-    tags: ["Web Design", "Wordpress", "Gutenberg"]
+    alt: "HeatTech Pest Control website preview"
   },
   {
-    title: " Pest Management of Texas, Inc. in Dallas, (PMOT)",
-    img: "/works/PestManagement.jpg",
+    title: "Pest Management of Texas",
+    image: "/works/PestManagement.jpg",
+    category: "Pest Control / Bed Bug",
+    technologies: ["WordPress", "Elementor"],
+    summary: "Responsive pest management website with service information and clear paths for prospective customers.",
     href: "https://www.pestcontroldallastx.com/",
-    tags: [ "Web Design", "Elementor", "WordPress"],
-    featuredDot: true
+    alt: "Pest Management of Texas website preview"
+  },
+  {
+    title: "Trojan Roofing",
+    image: "/works/Indytojan.jpg",
+    category: "Construction",
+    technologies: ["WordPress", "Elementor"],
+    summary: "Roofing company website with responsive service pages, clear calls to action, and an easy-to-manage layout.",
+    href: "https://indytrojanroofing.com/",
+    alt: "Trojan Roofing website preview"
+  },
+  {
+    title: "Madden Plumbing",
+    image: "/works/madden.jpg",
+    category: "Home Services",
+    technologies: ["WordPress", "Gutenberg"],
+    summary: "Plumbing website organizing services, service areas, reviews, and contact details in an editable block layout.",
+    href: "https://maddenplumbingservicesinc.com/",
+    alt: "Madden Plumbing website preview"
+  },
+  {
+    title: "Chapman Plumbing",
+    image: "/works/chapman.jpg",
+    category: "Home Services",
+    technologies: ["WordPress", "Gutenberg"],
+    summary: "Responsive plumbing website with clear service information, service areas, reviews, and contact options.",
+    href: "https://chapmanplumbingal.com/",
+    alt: "Chapman Plumbing website preview"
+  },
+  {
+    title: "KMAce Towing Services",
+    image: "/works/KMAce Towing Services.jpg",
+    category: "Home Services",
+    technologies: ["WordPress", "Elementor"],
+    summary: "Towing service website project presented with a mobile-friendly layout and direct service information.",
+    href: "https://kmacetowing.com/",
+    alt: "KMAce Towing Services website preview"
+  },
+  {
+    title: "Wholesale Property Depot",
+    image: "/works/Wpdllc.jpg",
+    category: "Real Estate",
+    technologies: ["WordPress", "Elementor", "PHP", "CSS"],
+    summary: "Custom WordPress build with structured property listings and a lightweight, custom-built chat feature.",
+    href: "https://wpdllc.net/",
+    alt: "Wholesale Property Depot website preview"
+  },
+  {
+    title: "Bed Bug BBQ Campaign Graphics",
+    image: "/works/2.png",
+    category: "Graphics",
+    technologies: ["Graphic Design", "Digital Campaign"],
+    summary: "Promotional graphic work created for bed bug treatment marketing.",
+    alt: "Bed bug treatment promotional graphics"
   }
 ];
 
-// Fallback helper if an image is missing
-function srcOr(listSrc: string) {
-  return listSrc || `https://picsum.photos/seed/${Math.random()}/1200/800`;
-}
+const filters = [
+  "All",
+  "Pest Control / Bed Bug",
+  "Solar",
+  "Healthcare",
+  "Beauty",
+  "Construction",
+  "E-commerce",
+  "Landing Pages",
+  "Graphics",
+  "Home Services",
+  "Real Estate"
+];
 ---
 
-<section class="projects">
+<section class="portfolio" id="projects" aria-labelledby="portfolio-heading">
   <div class="wrap">
-    <div class="grid">
-      {projects.map((p) => {
-        const CardTag = p.href ? "a" : "div";
-        return (
-          <article class="cell">
-            <CardTag class="card" href={p.href} {...(p.href?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-              <div class="media">
-                <img src={srcOr(p.img)} alt={p.title} loading="lazy" />
-                <div class="tags">
-                  {p.tags.map((t) => <span class="pill">{t}</span>)}
-                </div>
-                {p.featuredDot && <span class="dot" aria-hidden="true"></span>}
-                <span class="scrim" aria-hidden="true"></span>
-              </div>
-            </CardTag>
-            <h3 class="title">{p.title}</h3>
-          </article>
-        );
-      })}
+    <div class="intro">
+      <p class="eyebrow">Selected work</p>
+      <h2 id="portfolio-heading">Projects built for real businesses</h2>
+      <p class="lead">Browse website builds and creative work by industry or project type. Each project shows the tools and work involved.</p>
     </div>
+
+    <div class="filters" role="group" aria-label="Filter projects by category">
+      {filters.map((filter, index) => (
+        <button class="filter" type="button" data-filter={filter} aria-pressed={index === 0 ? "true" : "false"}>
+          {filter}
+        </button>
+      ))}
+    </div>
+
+    <p class="results" data-results aria-live="polite">{projects.length} projects</p>
+
+    <div class="grid" data-project-grid>
+      {projects.map((project) => (
+        <article class="card" data-category={project.category}>
+          <div class="media">
+            <img src={project.image} alt={project.alt} loading="lazy" />
+            <span class="category">{project.category}</span>
+          </div>
+          <div class="body">
+            <h3>{project.title}</h3>
+            <p>{project.summary}</p>
+            <ul class="tech" aria-label="Technologies used">
+              {project.technologies.map((technology) => <li>{technology}</li>)}
+            </ul>
+            {project.href ? (
+              <a class="visit" href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`Visit the ${project.title} website (opens in a new tab)`}>
+                Visit live website <span aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              <span class="visit visual-work">Visual project</span>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <p class="empty" data-empty hidden>No projects are listed in this category yet. Check back soon or contact me to discuss related work.</p>
   </div>
+
+  <script>
+    const root = document.querySelector(".portfolio");
+    if (root) {
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+      const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-category]"));
+      const empty = root.querySelector<HTMLElement>("[data-empty]");
+      const results = root.querySelector<HTMLElement>("[data-results]");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const selected = button.dataset.filter ?? "All";
+          let visible = 0;
+          buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+          cards.forEach((card) => {
+            const show = selected === "All" || card.dataset.category === selected;
+            card.hidden = !show;
+            if (show) visible += 1;
+          });
+          if (empty) empty.hidden = visible > 0;
+          if (results) results.textContent = `${visible} ${visible === 1 ? "project" : "projects"}`;
+        });
+      });
+    }
+  </script>
 </section>
 
 <style>
-.projects{
-  padding: clamp(1.8rem, 4vw, 2.6rem) 0;
-  background: transparent;   /* relies on page bg */
-  color: #e8e8ea;
-}
-
-.wrap{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-.grid{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-}
-@media (min-width: 860px){
-  .grid{ grid-template-columns: 1fr 1fr; gap: 22px; }
-}
-
-.cell{ display: grid; gap: 10px; }
-
-.card{
-  display:block;
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #14161c;
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  will-change: transform, box-shadow;
-  text-decoration: none;
-  color: inherit;
-}
-.card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.35);
-  border-color: rgba(255,255,255,.14);
-}
-
-/* media */
-.media{
-  position: relative;
-  aspect-ratio: 16 / 10;
-  background: #0f1218;
-}
-.media img{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit: cover; display:block;
-  filter: saturate(.98) contrast(1.02);
-  transition: transform .35s ease;
-}
-.card:hover .media img{ transform: scale(1.02); }
-
-/* soft vignette */
-.scrim{
-  position:absolute; inset:0;
-  background: radial-gradient(140% 100% at 50% 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.28) 100%);
-  pointer-events:none;
-}
-
-/* top-left tag pills */
-.tags{
-  position: absolute; left: 10px; top: 10px;
-  display: flex; flex-wrap: wrap; gap: 8px;
-  z-index: 2;
-}
-.pill{
-  display:inline-block;
-  padding: 6px 10px;
-  color:#e8e8ea;
-  background: rgba(20,22,28,.85);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius: 999px;
-  text-decoration: none;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 3px 10px rgba(0,0,0,.25) inset, 0 2px 6px rgba(0,0,0,.15);
-}
-
-/* small indicator dot (as in your screenshot) */
-.dot{
-  position:absolute; left: 14px; top: 14px;
-  width:8px; height:8px; border-radius:50%;
-  background:#f0c27b;
-  box-shadow: 0 0 8px rgba(240,194,123,.8);
-}
-
-/* title under card */
-.title{
-  margin: 0 4px 0 4px;
-  color: #e6eaf3;
-}
-
-/* high-contrast focus ring */
-.card:focus-visible{
-  outline: 2px solid #8b5cf6;
-  outline-offset: 2px;
-}
+.portfolio { padding: clamp(2.5rem, 6vw, 5rem) 0; color: #f4f6fb; }
+.wrap { width: min(1200px, calc(100% - 32px)); margin: 0 auto; }
+.intro { max-width: 720px; margin: 0 auto 2rem; text-align: center; }
+.eyebrow { margin: 0 0 .65rem; color: #9bb0ff; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.intro h2 { margin: 0; color: #fff; font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.12; font-weight: 700; }
+.lead { margin: .9rem auto 0; max-width: 58ch; color: #b8c0d2; line-height: 1.65; }
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; margin: 1.75rem 0 1rem; }
+.filter { min-height: 42px; padding: .62rem .92rem; border: 1px solid #343d51; border-radius: 999px; background: #151a25; color: #dce3f1; font: inherit; font-size: .88rem; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease; }
+.filter:hover { border-color: #8299f2; }
+.filter[aria-pressed="true"] { color: #101522; border-color: #b7c5ff; background: #b7c5ff; font-weight: 700; }
+.filter:focus-visible, .visit:focus-visible { outline: 3px solid #f3c967; outline-offset: 3px; }
+.results { min-height: 1.5rem; margin: 0 0 .75rem; color: #939db1; font-size: .88rem; text-align: center; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.card { min-width: 0; overflow: hidden; border: 1px solid rgba(191,205,238,.13); border-radius: 18px; background: rgba(20,25,36,.92); box-shadow: 0 12px 28px rgba(0,0,0,.18); }
+.card[hidden] { display: none; }
+.media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b101a; }
+.media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+.card:hover .media img { transform: scale(1.025); }
+.category { position: absolute; left: .8rem; bottom: .8rem; padding: .42rem .7rem; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(8,12,20,.82); color: #edf1ff; font-size: .78rem; backdrop-filter: blur(8px); }
+.body { display: flex; flex-direction: column; align-items: flex-start; padding: 1.15rem; }
+.body h3 { margin: 0; color: #fff; font-size: 1.25rem; line-height: 1.25; font-weight: 650; }
+.body p { margin: .65rem 0 .8rem; color: #bac2d1; font-size: .96rem; line-height: 1.55; }
+.tech { display: flex; flex-wrap: wrap; gap: .45rem; margin: auto 0 .9rem; padding: 0; list-style: none; }
+.tech li { padding: .34rem .58rem; border-radius: 6px; background: #222a39; color: #d5dded; font-size: .75rem; }
+.visit { display: inline-flex; align-items: center; gap: .35rem; min-height: 42px; color: #bdcaff; font-weight: 650; text-decoration: none; }
+.visit:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+.visual-work { color: #99a4ba; font-weight: 500; }
+.empty { margin: 1.5rem 0; color: #c2cada; text-align: center; }
+@media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.2rem; } .body { padding: 1.25rem; } }
+@media (min-width: 1024px) { .wrap { width: min(1200px, calc(100% - 64px)); } .grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.4rem; } }
+@media (prefers-reduced-motion: reduce) { .filter, .media img { transition: none; } }
 </style>
