@@ -2,13 +2,13 @@
 /**
  * Aboutme.astro
  * Props:
- *  - imageSrc: string (defaults to /works/Juniel.jpg in /public)
+ *  - imageSrc: string (defaults to /works/Juniel-portrait-2026.jpg in /public)
  *  - imageAlt: string
  */
 
 const {
-  imageSrc = "/works/Juniel.jpg",
-  imageAlt = "Portrait",
+  imageSrc = "/works/Juniel-portrait-2026.jpg",
+  imageAlt = "Juniel Tejoc, WordPress developer",
 } = Astro.props;
 
 ---
@@ -67,7 +67,7 @@ const {
       <!-- Right: Photo -->
       <figure class="photo reveal" style="--d: .3s">
         <div class="frame">
-          <img src={imageSrc} alt={imageAlt} loading="lazy" />
+          <img src={imageSrc} alt={imageAlt} width="1356" height="1536" loading="lazy" />
         </div>
       </figure>
     </div>
