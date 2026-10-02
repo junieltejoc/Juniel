@@ -1,4 +1,8 @@
 ---
+interface Props { home?: boolean }
+
+const { home = false } = Astro.props;
+
 type Project = {
   title: string;
   image: string;
@@ -132,28 +136,44 @@ const filters = [
   "Home Services",
   "Real Estate"
 ];
+
+const homeTitles = new Set([
+  "Top Bed Bug Pros",
+  "Bed Bugs Be Gone Now",
+  "Atlanta Bed Bug Experts",
+  "Trojan Roofing",
+  "Madden Plumbing",
+  "Wholesale Property Depot"
+]);
+const displayedProjects = home ? projects.filter((project) => homeTitles.has(project.title)) : projects;
+const displayedFilters = home
+  ? ["All", "Pest Control / Bed Bug", "Beauty", "E-commerce", "Construction", "Home Services", "Real Estate"]
+  : filters;
 ---
 
-<section class="portfolio" id="projects" aria-labelledby="portfolio-heading">
+<section class:list={["portfolio", { "portfolio--home": home }]} id="projects" aria-labelledby="portfolio-heading" data-portfolio>
   <div class="wrap">
     <div class="intro">
       <p class="eyebrow">Selected work</p>
-      <h2 id="portfolio-heading">Projects built for real businesses</h2>
-      <p class="lead">Browse website builds and creative work by industry or project type. Each project shows the tools and work involved.</p>
+      <h2 id="portfolio-heading">{home ? "Selected Website Projects" : "Projects built for real businesses"}</h2>
+      <p class="lead">{home ? "Explore selected website projects by industry, then browse the full portfolio for more work." : "Browse website builds and creative work by industry or project type. Each project shows the tools and work involved."}</p>
     </div>
 
     <div class="filters" role="group" aria-label="Filter projects by category">
-      {filters.map((filter, index) => (
+      {displayedFilters.map((filter, index) => (
         <button class="filter" type="button" data-filter={filter} aria-pressed={index === 0 ? "true" : "false"}>
           {filter}
+          {home && <span class="filter-count" aria-label={`${filter === "All" ? displayedProjects.length : displayedProjects.filter((project) => project.category === filter).length} projects`}>
+            {filter === "All" ? displayedProjects.length : displayedProjects.filter((project) => project.category === filter).length}
+          </span>}
         </button>
       ))}
     </div>
 
-    <p class="results" data-results aria-live="polite">{projects.length} projects</p>
+    <p class="results" data-results aria-live="polite">{displayedProjects.length} projects</p>
 
     <div class="grid" data-project-grid>
-      {projects.map((project) => (
+      {displayedProjects.map((project) => (
         <article class="card" data-category={project.category}>
           <div class="media">
             <img src={project.image} alt={project.alt} loading="lazy" />
@@ -178,31 +198,58 @@ const filters = [
     </div>
 
     <p class="empty" data-empty hidden>No projects are listed in this category yet. Check back soon or contact me to discuss related work.</p>
+    {home && <div class="all-projects"><a href="/Myworksindex/">View all projects <span aria-hidden="true">↗</span></a></div>}
   </div>
 
   <script>
-    const root = document.querySelector(".portfolio");
-    if (root) {
+    document.querySelectorAll<HTMLElement>("[data-portfolio]").forEach((root) => {
       const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter]"));
       const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-category]"));
       const empty = root.querySelector<HTMLElement>("[data-empty]");
       const results = root.querySelector<HTMLElement>("[data-results]");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let change = 0;
 
       buttons.forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
+          if (button.getAttribute("aria-pressed") === "true") return;
+          const currentChange = ++change;
           const selected = button.dataset.filter ?? "All";
-          let visible = 0;
+          cards.forEach((card) => card.getAnimations().forEach((animation) => animation.cancel()));
           buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+
+          if (!reducedMotion.matches) {
+            await Promise.all(cards.filter((card) => !card.hidden).map((card) =>
+              card.animate(
+                [{ opacity: 1, transform: "translateY(0)" }, { opacity: 0, transform: "translateY(-10px)" }],
+                { duration: 150, easing: "ease-in", fill: "forwards" }
+              ).finished.catch(() => {})
+            ));
+          }
+          if (currentChange !== change) return;
+
+          const shown: HTMLElement[] = [];
           cards.forEach((card) => {
             const show = selected === "All" || card.dataset.category === selected;
             card.hidden = !show;
-            if (show) visible += 1;
+            if (show) shown.push(card);
           });
-          if (empty) empty.hidden = visible > 0;
-          if (results) results.textContent = `${visible} ${visible === 1 ? "project" : "projects"}`;
+          if (empty) {
+            empty.hidden = shown.length > 0;
+            if (!shown.length) empty.textContent = `No ${selected.toLowerCase()} projects are featured here yet. Browse the full portfolio or check back soon.`;
+          }
+          if (results) results.textContent = `${shown.length} ${shown.length === 1 ? "project" : "projects"}`;
+
+          cards.forEach((card) => card.getAnimations().forEach((animation) => animation.cancel()));
+          if (!reducedMotion.matches) {
+            shown.forEach((card, index) => card.animate(
+              [{ opacity: 0, transform: "translateY(18px) scale(.98)" }, { opacity: 1, transform: "translateY(0) scale(1)" }],
+              { duration: 380, delay: Math.min(index, 8) * 45, easing: "cubic-bezier(.22,.61,.36,1)" }
+            ));
+          }
         });
       });
-    }
+    });
   </script>
 </section>
 
@@ -217,6 +264,8 @@ const filters = [
 .filter { min-height: 42px; padding: .62rem .92rem; border: 1px solid #343d51; border-radius: 999px; background: #151a25; color: #dce3f1; font: inherit; font-size: .88rem; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease; }
 .filter:hover { border-color: #8299f2; }
 .filter[aria-pressed="true"] { color: #101522; border-color: #b7c5ff; background: #b7c5ff; font-weight: 700; }
+.filter-count { display: inline-grid; min-width: 1.35rem; height: 1.35rem; margin-left: .45rem; padding: 0 .2rem; place-items: center; border-radius: 999px; background: rgba(255,255,255,.12); font-size: .7rem; font-weight: 700; }
+.filter[aria-pressed="true"] .filter-count { background: rgba(16,21,34,.13); }
 .filter:focus-visible, .visit:focus-visible { outline: 3px solid #f3c967; outline-offset: 3px; }
 .results { min-height: 1.5rem; margin: 0 0 .75rem; color: #939db1; font-size: .88rem; text-align: center; }
 .grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
@@ -235,7 +284,12 @@ const filters = [
 .visit:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 .visual-work { color: #99a4ba; font-weight: 500; }
 .empty { margin: 1.5rem 0; color: #c2cada; text-align: center; }
+.all-projects { margin-top: 2rem; text-align: center; }
+.all-projects a { display: inline-flex; align-items: center; gap: .6rem; min-height: 48px; padding: .75rem 1.25rem; border-radius: 999px; background: #b7c5ff; color: #101522; font-weight: 750; text-decoration: none; transition: transform .2s ease, background .2s ease; }
+.all-projects a:hover { transform: translateY(-2px); background: #d3dcff; }
+.all-projects a:focus-visible { outline: 3px solid #f3c967; outline-offset: 3px; }
+@media (max-width: 639px) { .portfolio--home .filters { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding: .25rem 0 .75rem; scrollbar-width: thin; scroll-snap-type: x proximity; } .portfolio--home .filter { flex: 0 0 auto; scroll-snap-align: start; } }
 @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.2rem; } .body { padding: 1.25rem; } }
 @media (min-width: 1024px) { .wrap { width: min(1200px, calc(100% - 64px)); } .grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.4rem; } }
-@media (prefers-reduced-motion: reduce) { .filter, .media img { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .filter, .media img, .all-projects a { transition: none; } }
 </style>
