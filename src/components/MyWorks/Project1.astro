@@ -274,7 +274,7 @@ const displayedFilters = home
 .filter:focus-visible, .visit:focus-visible { outline: 3px solid #f3c967; outline-offset: 3px; }
 .results { min-height: 1.5rem; margin: 0 0 .75rem; color: #939db1; font-size: .88rem; text-align: center; }
 .grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-.grid[data-visible="1"] { max-width: 380px; margin-inline: auto; }
+.grid[data-visible="1"] { grid-template-columns: minmax(0, 1fr); max-width: 380px; margin-inline: auto; }
 .card { min-width: 0; overflow: hidden; border: 1px solid rgba(191,205,238,.13); border-radius: 18px; background: rgba(20,25,36,.92); box-shadow: 0 12px 28px rgba(0,0,0,.18); }
 .card[hidden] { display: none; }
 .media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b101a; }
